@@ -17,8 +17,25 @@ export class StudentService implements IStudentService {
     }
   }
 
-  async getAllStudents(): Promise<IStudent[]> {
-    return await StudentModel.find();
+  async getAllStudents(
+    page: number = 1,
+    limit: number = 5
+  ): Promise<{
+    data: IStudent[];
+    total: number;
+    page: number;
+    totalPages: number;
+  }> {
+    const skip = (page - 1) * limit;
+    const total = await StudentModel.countDocuments();
+    const students = await StudentModel.find().skip(skip).limit(limit);
+
+    return {
+      data: students,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async getStudentById(id: string): Promise<IStudent | null> {

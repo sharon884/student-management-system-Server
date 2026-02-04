@@ -3,7 +3,7 @@ import { IStudentService } from "../interfaces/student.service.interface";
 
 export class StudentController {
 
-  constructor(private readonly studentService: IStudentService) {}
+  constructor(private readonly studentService: IStudentService) { }
 
 
 
@@ -21,8 +21,11 @@ export class StudentController {
 
   async getAllStudents(req: Request, res: Response): Promise<Response> {
     try {
-      const students = await this.studentService.getAllStudents();
-      return res.status(200).json(students);
+      const page = req.query.page ? parseInt(req.query.page as string) : 1;
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 5;
+
+      const result = await this.studentService.getAllStudents(page, limit);
+      return res.status(200).json(result);
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
     }
@@ -98,5 +101,5 @@ export class StudentController {
     }
   }
 
-  
+
 }

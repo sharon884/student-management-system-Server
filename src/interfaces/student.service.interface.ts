@@ -12,7 +12,12 @@ export interface IStudentService {
     course: string;
   }): Promise<IStudent>;
 
-  getAllStudents(): Promise<IStudent[]>;
+  getAllStudents(page: number, limit: number): Promise<{
+    data: IStudent[];
+    total: number;
+    page: number;
+    totalPages: number;
+  }>;
 
   getStudentById(id: string): Promise<IStudent | null>;
 
